@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using System.Threading;
 
 namespace TareaAPI.Infrastructure.Entities
 {
@@ -20,5 +21,6 @@ namespace TareaAPI.Infrastructure.Entities
 
         [MaxLength(100)]
         public string? AdditionalData { get; set; }
+
     }
 }

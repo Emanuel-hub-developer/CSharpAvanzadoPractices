@@ -13,6 +13,9 @@ namespace TareaAPI.Controllers
     {
         private readonly TareaAPIContext _context;
 
+        delegate bool ValidarTarea(TareaEntity task);
+
+
         public TareaController(TareaAPIContext context)
         {
             _context = context;
@@ -44,6 +47,35 @@ namespace TareaAPI.Controllers
 
         }
 
+        [HttpGet]
+        [Route("obtenerPorStatus")]
+        public async Task<IActionResult> GetTareasPorStatus(string statusName)
+        {
+            if (string.IsNullOrWhiteSpace(statusName))
+            {
+                return BadRequest("El nombre del status es requerido.");
+            }
+
+            var tareas = await _context.Tareas
+                .Where(t => t.Status == statusName)
+                .Select(t => new
+                {
+                    t.IdTarea,
+                    t.Description,
+                    t.DueDate,
+                    t.Status,
+                    t.AdditionalData
+                })
+                .ToListAsync();
+
+            if (tareas == null || !tareas.Any())
+            {
+                return NotFound($"No se encontraron tareas con el status '{statusName}'.");
+            }
+
+            return Ok(tareas);
+        }
+
         [HttpPost]
         [Route("crearTarea")]
         public async Task<IActionResult> CreateTarea(TareaEntity tareaEntity)
@@ -56,19 +88,42 @@ namespace TareaAPI.Controllers
                 AdditionalData = tareaEntity.AdditionalData
             };
 
+            if (tarea == null)
+            {
+                return NotFound();
+            }
+
             try
             {
-                if (tarea == null)
+                ValidarTarea validar = task => !string.IsNullOrWhiteSpace(task.Description) && task.DueDate > DateTime.Now;
+
+                Func<TareaEntity,int> calculateDaysLeft = t => (t.DueDate - DateTime.Now).Days;
+
+                Func<TareaEntity,string> notifyCreation = task =>
                 {
-                    return NotFound();
+                    int daysLeft = calculateDaysLeft(task);
+
+                    return $"Tarea creada: {task.Description}, vencimiento: {task.DueDate}, dias restantes: {daysLeft}";
+                };
+              
+
+                if (!validar(tarea))
+                {
+                    return BadRequest("Tarea invalida");
                 }
 
                 await _context.Tareas.AddAsync(tarea);
 
                 await _context.SaveChangesAsync();
 
-                return CreatedAtAction(nameof(CreateTarea), new { id = tarea.IdTarea }, tarea);
+               var mensaje = $"Tarea creada exitosamente.\n{notifyCreation(tarea)}";
 
+                return Ok(new
+                {
+                    success = true,
+
+                    message = mensaje
+                });
 
             }
             catch (Exception ex)
@@ -87,26 +142,49 @@ namespace TareaAPI.Controllers
 
             var tarea = await _context.Tareas.FirstOrDefaultAsync(t => t.IdTarea == id);
 
+
             if (tarea == null)
             {
-
                 return NotFound(new { success = false, message = "Tarea no encontrada." });
             }
-
 
             tarea.Description = tareaEntity.Description;
             tarea.DueDate = tareaEntity.DueDate;
             tarea.Status = tareaEntity.Status;
             tarea.AdditionalData = tareaEntity.AdditionalData;
 
+
             try
             {
-                
+         
+                ValidarTarea validar = task => !string.IsNullOrWhiteSpace(task.Description) && task.DueDate > DateTime.Now;
+
+                if (!validar(tarea))
+                {
+                    return BadRequest("Tarea invalida");
+                }
+
+                Func<TareaEntity, int> calculateDaysLeft = t => (t.DueDate - DateTime.Now).Days;
+
+                int diasRestantes = calculateDaysLeft(tarea);
+
+                Func<TareaEntity,string> notifyUpdate = task =>
+                {
+                   return$"Tarea actualizada: {task.Description}, nueva fecha de vencimiento: {task.DueDate}, dias restantes: {diasRestantes}";
+                };
 
                 await _context.SaveChangesAsync();
 
-                return Ok(new { success = true, message = "Tareas actualizada correctamente.", data = tarea }); ;
-                
+
+                var mensaje = $"Tarea creada exitosamente.\n{notifyUpdate(tarea)}";
+
+                return Ok(new
+                {
+                    success = true,
+
+                    message = mensaje
+                });
+
             }
             catch (Exception ex)
             {
@@ -115,6 +193,7 @@ namespace TareaAPI.Controllers
                 return StatusCode(500, "Ocurrio un error al actualizar la tarea.");
             }
         }
+
 
 
         [HttpDelete]
