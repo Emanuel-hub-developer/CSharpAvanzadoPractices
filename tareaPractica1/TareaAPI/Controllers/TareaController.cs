@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using System.Threading;
 using TareaAPI.Common.Models;
+using TareaAPI.Factory;
 using TareaAPI.Infrastructure.Data;
 using TareaAPI.Infrastructure.Entities;
 
@@ -80,13 +81,12 @@ namespace TareaAPI.Controllers
         [Route("crearTarea")]
         public async Task<IActionResult> CreateTarea(TareaEntity tareaEntity)
         {
-            var tarea = new TareaEntity
-            {
-                Description = tareaEntity.Description,
-                DueDate = tareaEntity.DueDate,
-                Status = tareaEntity.Status,
-                AdditionalData = tareaEntity.AdditionalData
-            };
+            var tarea = TareaFactory.CrearTareaBasica(
+            tareaEntity.Description,
+            tareaEntity.DueDate,
+            tareaEntity.Status,
+            tareaEntity.AdditionalData
+        );
 
             if (tarea == null)
             {
