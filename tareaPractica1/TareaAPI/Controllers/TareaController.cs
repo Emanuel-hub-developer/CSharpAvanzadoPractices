@@ -5,6 +5,7 @@ using TareaAPI.Common.Models;
 using TareaAPI.Factory;
 using TareaAPI.Infrastructure.Data;
 using TareaAPI.Infrastructure.Entities;
+using TareaAPI.Utilities;
 
 namespace TareaAPI.Controllers
 {
@@ -13,14 +14,15 @@ namespace TareaAPI.Controllers
     public class TareaController : Controller
     {
         private readonly TareaAPIContext _context;
+        private readonly TaskQueueManager _taskQueueManager;
 
         delegate bool ValidarTarea(TareaEntity task);
 
 
-        public TareaController(TareaAPIContext context)
+        public TareaController(TareaAPIContext context,TaskQueueManager taskManagerQueue)
         {
             _context = context;
-
+            _taskQueueManager = taskManagerQueue;
         }
 
         [HttpGet]
@@ -112,11 +114,18 @@ namespace TareaAPI.Controllers
                     return BadRequest("Tarea invalida");
                 }
 
-                await _context.Tareas.AddAsync(tarea);
+                var tcs = new TaskCompletionSource<bool>();
 
-                await _context.SaveChangesAsync();
+                _taskQueueManager.Enqueue(async () =>
+                {
+                    await _context.Tareas.AddAsync(tarea);
+                    await _context.SaveChangesAsync();
+                    tcs.SetResult(true);
+                });
 
-               var mensaje = $"Tarea creada exitosamente.\n{notifyCreation(tarea)}";
+                await tcs.Task;
+
+                var mensaje = $"Tarea creada exitosamente.{notifyCreation(tarea)}";
 
                 return Ok(new
                 {
