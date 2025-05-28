@@ -3,7 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.11.35327.3
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TareaAPI", "TareaAPI.csproj", "{C8C9316F-0322-4DD6-AD30-FF75811BC881}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TareaAPI", "TareaAPI.csproj", "{C8C9316F-0322-4DD6-AD30-FF75811BC881}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TareaAPI.Core.ApplicationLayer", "..\TareaAPI.Core.ApplicationLayer\TareaAPI.Core.ApplicationLayer.csproj", "{5358AD3C-E1B4-488A-86C8-BA5B8FF1042E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TareaAPI.Core.DomainLayer", "..\TareaAPI.Core.DomainLayer\TareaAPI.Core.DomainLayer.csproj", "{36EEFA90-3EF2-4DFA-85D7-7D0C221CB604}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TareaAPI.InfrastructureLayer.Persistance", "..\TareaAPI.InfrastructureLayer.Persistance\TareaAPI.InfrastructureLayer.Persistance.csproj", "{D09F316C-4084-479E-85E5-5B43EB87E768}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +21,18 @@ Global
 		{C8C9316F-0322-4DD6-AD30-FF75811BC881}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C8C9316F-0322-4DD6-AD30-FF75811BC881}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C8C9316F-0322-4DD6-AD30-FF75811BC881}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5358AD3C-E1B4-488A-86C8-BA5B8FF1042E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5358AD3C-E1B4-488A-86C8-BA5B8FF1042E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5358AD3C-E1B4-488A-86C8-BA5B8FF1042E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5358AD3C-E1B4-488A-86C8-BA5B8FF1042E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{36EEFA90-3EF2-4DFA-85D7-7D0C221CB604}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{36EEFA90-3EF2-4DFA-85D7-7D0C221CB604}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{36EEFA90-3EF2-4DFA-85D7-7D0C221CB604}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{36EEFA90-3EF2-4DFA-85D7-7D0C221CB604}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D09F316C-4084-479E-85E5-5B43EB87E768}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D09F316C-4084-479E-85E5-5B43EB87E768}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D09F316C-4084-479E-85E5-5B43EB87E768}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D09F316C-4084-479E-85E5-5B43EB87E768}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

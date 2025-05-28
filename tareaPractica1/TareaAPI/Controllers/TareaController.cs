@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Threading;
-using TareaAPI.Common.Models;
 using TareaAPI.Factory;
 using TareaAPI.Infrastructure.Data;
 using TareaAPI.Infrastructure.Entities;

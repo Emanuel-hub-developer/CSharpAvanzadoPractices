@@ -1,9 +1,9 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
-    <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
@@ -18,15 +18,12 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
     <PackageReference Include="System.Reactive" Version="6.0.1" />
     <PackageReference Include="System.Reactive.Linq" Version="6.0.1" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\TareaAPI.Core.ApplicationLayer\TareaAPI.Core.ApplicationLayer.csproj" />
     <ProjectReference Include="..\TareaAPI.Core.DomainLayer\TareaAPI.Core.DomainLayer.csproj" />
-    <ProjectReference Include="..\TareaAPI.InfrastructureLayer.Persistance\TareaAPI.InfrastructureLayer.Persistance.csproj" />
   </ItemGroup>
 
 </Project>
