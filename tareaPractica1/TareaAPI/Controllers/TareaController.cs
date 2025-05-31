@@ -4,6 +4,7 @@ using System.Threading;
 using TareaAPI.Factory;
 using TareaAPI.Infrastructure.Data;
 using TareaAPI.Infrastructure.Entities;
+using TareaAPI.InfrastructureLayer.Persistance.Utilities;
 using TareaAPI.Utilities;
 
 namespace TareaAPI.Controllers
@@ -76,6 +77,32 @@ namespace TareaAPI.Controllers
             }
 
             return Ok(tareas);
+        }
+
+        [HttpGet]
+        [Route("obtenerPorcentajeCompletado")]
+        public async Task<IActionResult> ObtenerPorcentajeCompletado()
+        {
+            try
+            {
+                var tareas = await _context.Tareas.ToListAsync();
+                if (tareas == null || !tareas.Any())
+                {
+                    return NotFound("No hay tareas disponibles para calcular el porcentaje.");
+                }
+
+                double porcentaje = TaskAnalitics.CalcularPorcentajeCompletado(tareas);
+                return Ok(new
+                {
+                    porcentaje,
+                    mensaje = $"El Porcentaje de tareas completadas es: {porcentaje:F2}%"
+                });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error al calcular el porcentaje: {ex.Message}");
+                return StatusCode(500, "Ocurrio un error al calcular el porcentaje de tareas completadas.");
+            }
         }
 
         [HttpPost]
