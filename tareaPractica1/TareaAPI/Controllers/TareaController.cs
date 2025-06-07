@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Threading;
 using TareaAPI.Factory;
@@ -25,6 +26,7 @@ namespace TareaAPI.Controllers
             _taskQueueManager = taskManagerQueue;
         }
 
+        [Authorize]
         [HttpGet]
         [Route("obtenerTareas")]
         public async Task<IActionResult> GetTareas()
@@ -50,6 +52,7 @@ namespace TareaAPI.Controllers
 
         }
 
+        [Authorize]
         [HttpGet]
         [Route("obtenerPorStatus")]
         public async Task<IActionResult> GetTareasPorStatus(string statusName)
@@ -79,6 +82,7 @@ namespace TareaAPI.Controllers
             return Ok(tareas);
         }
 
+        [Authorize]
         [HttpGet]
         [Route("obtenerPorcentajeCompletado")]
         public async Task<IActionResult> ObtenerPorcentajeCompletado()
@@ -105,6 +109,7 @@ namespace TareaAPI.Controllers
             }
         }
 
+        [Authorize]
         [HttpPost]
         [Route("crearTarea")]
         public async Task<IActionResult> CreateTarea(TareaEntity tareaEntity)
@@ -169,6 +174,7 @@ namespace TareaAPI.Controllers
             }
         }
 
+        [Authorize]
         [HttpPut]
         [Route("actualizarTarea")]
 
@@ -230,7 +236,7 @@ namespace TareaAPI.Controllers
         }
 
 
-
+        [Authorize]
         [HttpDelete]
         [Route("eliminarTarea")]
         public async Task<IActionResult> DeleteTarea(int id)
