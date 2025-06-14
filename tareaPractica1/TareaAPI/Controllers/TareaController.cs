@@ -1,8 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Identity.Client;
 using System.Threading;
 using TareaAPI.Factory;
+using TareaAPI.Hubs;
 using TareaAPI.Infrastructure.Data;
 using TareaAPI.Infrastructure.Entities;
 using TareaAPI.InfrastructureLayer.Persistance.Utilities;
@@ -16,14 +19,17 @@ namespace TareaAPI.Controllers
     {
         private readonly TareaAPIContext _context;
         private readonly TaskQueueManager _taskQueueManager;
+        private readonly IHubContext<NotificationHub> _hubContext;
 
         delegate bool ValidarTarea(TareaEntity task);
 
 
-        public TareaController(TareaAPIContext context,TaskQueueManager taskManagerQueue)
+        public TareaController(TareaAPIContext context,TaskQueueManager taskManagerQueue, IHubContext<NotificationHub> hubContext)
         {
             _context = context;
             _taskQueueManager = taskManagerQueue;
+            _hubContext = hubContext;
+
         }
 
         [Authorize]
@@ -158,6 +164,8 @@ namespace TareaAPI.Controllers
 
                 var mensaje = $"Tarea creada exitosamente.{notifyCreation(tarea)}";
 
+                await _hubContext.Clients.All.SendAsync("receiveNotificationTask1", mensaje);
+
                 return Ok(new
                 {
                     success = true,
@@ -217,7 +225,7 @@ namespace TareaAPI.Controllers
                 await _context.SaveChangesAsync();
 
 
-                var mensaje = $"Tarea creada exitosamente.\n{notifyUpdate(tarea)}";
+                var mensaje = $"Tarea creada exitosamente.{notifyUpdate(tarea)}";
 
                 return Ok(new
                 {

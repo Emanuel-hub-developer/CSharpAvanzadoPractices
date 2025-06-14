@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
+using TareaAPI.Hubs;
 using TareaAPI.Infrastructure.Data;
 using TareaAPI.InfrastructureLayer.Persistance.Utilities;
 using TareaAPI.Utilities;
@@ -13,7 +14,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddControllers();
-
+builder.Services.AddSignalR();
 builder.Services.AddDbContext<TareaAPIContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("API_Tarea"));
@@ -125,5 +126,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.MapHub<NotificationHub>("/receiveNotificationTask");
 
 app.Run();
