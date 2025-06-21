@@ -63,15 +63,13 @@ builder.Services.AddSwaggerGen(c =>
     // Agregar definición de seguridad
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
-        Name = "Authorization",
-        Type = SecuritySchemeType.Http,
-        Scheme = "Bearer",
-        BearerFormat = "JWT",
         In = ParameterLocation.Header,
-        Description = "Ingrese el token JWT con el prefijo 'Bearer'. Ejemplo: Bearer {token}"
+        Description = "Ingrese el token JWT con el prefijo 'Bearer' (Bearer <token>)",
+        Name = "Authorization",
+        Type = SecuritySchemeType.ApiKey,
+        Scheme = "Bearer"
     });
 
-    // Agregar requerimiento de seguridad global
     c.AddSecurityRequirement(new OpenApiSecurityRequirement
     {
         {
@@ -83,7 +81,7 @@ builder.Services.AddSwaggerGen(c =>
                     Id = "Bearer"
                 }
             },
-            new string[] {}
+            Array.Empty<string>()
         }
     });
 });

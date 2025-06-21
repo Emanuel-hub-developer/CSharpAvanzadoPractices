@@ -184,7 +184,7 @@ namespace TareaAPI.Controllers
 
         [Authorize]
         [HttpPut]
-        [Route("actualizarTarea")]
+        [Route("actualizarTarea/{id}")]
 
         public async Task<IActionResult> UpdateTarea(int id, TareaEntity tareaEntity)
         {
@@ -246,7 +246,7 @@ namespace TareaAPI.Controllers
 
         [Authorize]
         [HttpDelete]
-        [Route("eliminarTarea")]
+        [Route("eliminarTarea/{id}")]
         public async Task<IActionResult> DeleteTarea(int id)
         {
 
